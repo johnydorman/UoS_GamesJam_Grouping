@@ -24,7 +24,8 @@ public class Individual {
 		Group[][] offspringGroups = deepCopyIndividual(this);
 		
 		// Mutate one of the group sets at random
-		offspringGroups[context.random.nextInt(groups.length)] = context.buildGroupSet();
+		// ignoring stored groups
+		offspringGroups[context.random.nextInt(groups.length-context.getInt("PREVIOUSGROUPSAMOUNT"))+context.getInt("PREVIOUSGROUPSAMOUNT")] = context.buildGroupSet();
 		
 		Individual offspring = new Individual(offspringGroups);
 		return offspring;
@@ -34,7 +35,7 @@ public class Individual {
 	 * Swaps a group set from each individual
 	 */
 	public Individual[] crossover(Context context, Individual other){
-		int crossoverIndex = context.random.nextInt(groups.length);
+		int crossoverIndex = context.random.nextInt(context.random.nextInt(groups.length-context.getInt("PREVIOUSGROUPSAMOUNT"))+context.getInt("PREVIOUSGROUPSAMOUNT"));
 		
 		Group[][] offspring1Groups = deepCopyIndividual(this);
 		offspring1Groups[crossoverIndex] = deepCopyGroupSet(other.groups[crossoverIndex]);
@@ -58,10 +59,10 @@ public class Individual {
 			
 			for(Group group : groupSet){
 				if(group.hasLevel5()){
-					runningFitness+= 2;
+					runningFitness+= 10;
 				}
 				if(group.hasProgrammer()){
-					runningFitness+= 2;
+					runningFitness+= 5;
 				}
 				
 				for(Student stu : group.getMembers()){
@@ -84,7 +85,7 @@ public class Individual {
 			Set<Integer> set = new HashSet<Integer>(something);
 
 			if(set.size() == something.size()){
-				runningFitness += 1;
+				runningFitness += 2;
 			}
 		}
 		
@@ -100,7 +101,7 @@ public class Individual {
 		for(int i = 0; i < groups.length; i++){
 			for(int j = 0; j < groups[i].length; j++){
 				for(Student student : groups[i][j].getMembers()){
-					ret +=  "GroupSet" + i  + "," + "Group" + j + "," + student.getId() + "\n";
+					ret +=  "GroupSet" + i  + "," + "Group" + j + "," + student.getId() + "," + student.getLevel() + "," + student.getCourseString() + "\n";
 				}
 			}
 		}

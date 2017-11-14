@@ -22,10 +22,21 @@ public class GA {
 		population = new Individual[context.getInt("POPULATION")];
 		fitness = new Double[context.getInt("POPULATION")];
 		
-		buildPopulation();
+		if(context.getInt("PREVIOUSGROUPS") == 1)
+			buildPopulation();
+		else
+			buildRandomPopulation();
 	}
 	
 	private void buildPopulation() {
+		for(int i = 0; i < population.length; i++){
+			population[i] = context.generateIndividualFromFile();
+			fitness[i] = population[i].setFitness();
+		}
+
+	}
+	
+	private void buildRandomPopulation() {
 		for(int i = 0; i < population.length; i++){
 			population[i] = context.generateIndividual();
 			fitness[i] = population[i].setFitness();

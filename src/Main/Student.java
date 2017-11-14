@@ -18,6 +18,13 @@ public class Student {
 	public int getCourse(){
 		return course;
 	}
+	public String getCourseString(){
+		if(course == 0)
+			return "DESIGN";
+		else 
+			return "PROGRAMMING";
+	}
+	
 	public int getLevel(){
 		return level;
 	}
